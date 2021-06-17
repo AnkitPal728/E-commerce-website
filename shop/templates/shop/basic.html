@@ -9,6 +9,7 @@
   <!-- Bootstrap CSS -->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
@@ -17,6 +18,74 @@
 
   <title>{% block title %} {% endblock %}</title>
   <style>
+    footer{
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111;
+    height: auto;
+    width: 100vw;
+    font-family: "Open Sans";
+    padding-top: 40px;
+    color: #fff;
+    }
+
+    .footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    }
+   .footer-content h3{
+    font-size: 1.8rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    line-height: 3rem;
+   }
+   .footer-content p{
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+   }
+   .socials{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0 3rem 0;
+   }
+  .socials li{
+    margin: 0 10px;
+  }
+  .socials a{
+    text-decoration: none;
+    color: #fff;
+  }
+  .socials a i{
+    font-size: 1.1rem;
+    transition: color .4s ease;
+   }
+  .socials a:hover i{
+    color: aqua;
+  }
+  .footer-bottom{
+    background: #000;
+    width: 100vw;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .footer-bottom p{
+    font-size: 14px;
+    word-spacing: 2px;
+    text-transform: capitalize;
+  }
+  .footer-bottom span{
+    text-transform: uppercase;
+    opacity: .4;
+    font-weight: 200;
+  }
     {% block style %} {% endblock %}
   </style>
 </head>
@@ -24,7 +93,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/shop/">MyShop</a>
+      <a class="navbar-brand" href="/shop/"><b>MAC.com</b></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -47,12 +116,13 @@
             <a class="nav-link" href="/shop/contact">Contact us</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form method="get" action="/shop/search" class="d-flex">
+          <input class="form-control me-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        <button type="button" class="btn btn-secondary mx-2" id="popcart" data-bs-html="true" data-bs-trigger="hover" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content='left popover'>
+        <button type="button" class="btn btn-success mx-2" id="popcart" data-bs-html="true" data-bs-trigger="hover" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content='left popover'>
           Cart(<span id="cart">0</span>) </button>
+          <i class="fa fa-sign-out" style="font-size:48px;color:red" onclick="signout()"></i>
       </div>
     </div>
   </nav>
@@ -71,6 +141,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
   -->
   <script>
+    function signout(){
+      window.location.href="/";
+    }
     if (localStorage.getItem('cart') == null) var cart = {};
     else {
       cart = JSON.parse(localStorage.getItem('cart'));
@@ -86,31 +159,30 @@
     function update_pop(cart){
         var str="";
         var i=1;
-        str+='<h5>Your Cart Items</h5>';
+        str+='<h6>Your Cart Items</h6>';
         str+='<div>';
         for(var item in cart){
-           if(cart[item]>=1){
-           str+='<b>' + i + '. ' + '</b>' + document.getElementById('name'+item).innerHTML + 'Qty: ' + cart[item] + '<br>';
+           if(cart[item][0]>=1){
+           str+='<b>' + i + '. ' + '</b>' + cart[item][1] + ' <b>Qty: </b>' + cart[item][0] + '<br>';
            i++;
            }
         }
         str+='</div>';
-        str+='<a href="/shop/checkout" ><span class="btn btn-primary btn-sm my-2 mx-1">Check Out</span></a><span class="btn btn-primary btn-sm mx-1 my-2 clear" id="clear_crt">Clear Cart</span>';
+        if(i==1)str+='<p>Empty Cart <b>[ ]</b></p>';
         document.getElementById('popcart').setAttribute('data-bs-content',str);
     }
 
-    $('#clear_crt').on('click','span.clear',function(){
-       console.log('clicked');
-       localStorage.clear();
-       cart={};
-       update_cart(cart);
-       update_pop(cart);
-    });
-
     $('.divpr').on('click','button.cart',function(){
-      var idstr = this.id.toString();
-      if (cart[idstr] != undefined) cart[idstr] += 1;
-      else cart[idstr] = 1;
+      idstr = this.id.toString();
+      if (cart[idstr] != undefined) {
+        qty=cart[idstr][0]+1;
+      }
+      else {
+         qty=1;
+         name=document.getElementById('name'+idstr).innerHTML;
+         price=document.getElementById('price'+idstr).innerHTML;
+         cart[idstr] = [qty,name,parseInt(price)];
+      }
       update_cart(cart);
       update_pop(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -119,15 +191,15 @@
 
     function update_cart(cart){
       for(var item in cart){
-        document.getElementById('div'+item).innerHTML="<button id='minus" + item + "' class='btn btn-primary minus'>-</button> <span id='val" + item + "''>" + cart[item] + "</span> <button id='plus" + item + "' class='btn btn-primary plus'> + </button>";
+        document.getElementById('div'+item).innerHTML="<button id='minus" + item + "' class='btn btn-primary minus'>-</button> <span id='val" + item + "''>" + cart[item][0] + "</span> <button id='plus" + item + "' class='btn btn-primary plus'> + </button>";
       }
     }
     $('.divpr').on('click','button.minus',function(){
         a=this.id.slice(7,);
-        if(cart['pr'+a]!=undefined){
-         cart['pr'+a]=Math.max(0,cart['pr'+a]-1);
-        document.getElementById('valpr'+a).innerHTML=cart['pr'+a];
-        if(cart['pr'+a]==0)delete cart['pr'+a];
+        if(cart['pr'+a][0]!=undefined){
+         cart['pr'+a][0]=Math.max(0,cart['pr'+a][0]-1);
+        document.getElementById('valpr'+a).innerHTML=cart['pr'+a][0];
+        if(cart['pr'+a][0]==0)delete cart['pr'+a];
         localStorage.setItem('cart', JSON.stringify(cart));
         document.getElementById('cart').innerHTML = Object.keys(cart).length;
         update_pop(cart);
@@ -135,15 +207,15 @@
     });
     $('.divpr').on('click','button.plus',function(){
         a=this.id.slice(6,);
-        if(cart['pr'+a]!=undefined){
-        cart['pr'+a]=cart['pr'+a]+1;
-        document.getElementById('valpr'+a).innerHTML=cart['pr'+a];
+        if(cart['pr'+a][0]!=undefined){
+        cart['pr'+a][0]=cart['pr'+a][0]+1;
+        document.getElementById('valpr'+a).innerHTML=cart['pr'+a][0];
         localStorage.setItem('cart', JSON.stringify(cart));
         document.getElementById('cart').innerHTML = Object.keys(cart).length;
         }
         else {
-         cart['pr'+a] = 1;
-         document.getElementById('valpr'+a).innerHTML=cart['pr'+a];
+         cart['pr'+a][0] = 1;
+         document.getElementById('valpr'+a).innerHTML=cart['pr'+a][0];
          localStorage.setItem('cart', JSON.stringify(cart));
          document.getElementById('cart').innerHTML = Object.keys(cart).length;
         }
@@ -151,10 +223,29 @@
     });
     {% block script %} {% endblock %}
   </script>
-</body>
-<footer style="background-color:Gray;">
+<!--<footer style="background-color: black;">
   <p class="float-end"><a href="#">Back to top</a></p>
-  <p>© 2017–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
-</footer>
+  <p>© 2021–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+</footer>-->
+<div class="conatiner" stye="padding-top: 2vh;">
+  <footer>
+        <div class="footer-content">
+            <h3><a href="/shop" style="text-decoration: none;">My Awesome Cart</a></h3>
+            <p>We are always happy to help you. we are strong, when we are together.</p>
+            <ul class="socials">
+                <li><a href="https://facebook.com"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="https://twitter.com"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="https://google.com"><i class="fa fa-google-plus"></i></a></li>
+                <li><a href="https://youtube.com"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="https://linkedin.com"><i class="fa fa-linkedin-square"></i></a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>copyright &copy;2021<a href="/shop" style="padding-left: 2vh; text-decoration: none">Mac.com</a></p>
+        </div>
+    </footer>
+  </div>
+</body>
+
 
 </html>

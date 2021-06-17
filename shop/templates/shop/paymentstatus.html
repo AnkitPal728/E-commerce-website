@@ -1,0 +1,69 @@
+{% extends 'shop/basic.html' %}
+{% block title%} Payment Status{% endblock %}
+{% block body %}
+<div class="container" style="padding: 10vh; padding-top: 0vh; width: 80vh;">
+    <div class="container" style="padding: 4vh;">
+        <h4 style="padding-left: 4vh;">Your payment details</h4>
+    </div>
+    <div class="container" style="padding-left: 4vh;">
+
+        {% if response.RESPCODE == '01' %}
+        <div class="container"
+             style="display: flex; background-color: rgb(76, 235, 76); justify-content: center; padding-left: 6vh; padding-right: 6vh;">
+            <div style="display: flex; justify-content: center;">
+                <div><span style="content:'\2713';"><h2 style="color: rgba(234, 241, 241, 0.904);">&#10003;</h2></span>
+                </div>
+                <div style="padding-left: 2vh;"><h4 class="res">SUCCESS</h4></div>
+            </div>
+        </div>
+
+        {% else %}
+
+        <div class="container"
+             style="display: flex; background-color: rgb(235, 53, 53); justify-content: center; padding-left: 6vh; padding-right: 6vh;">
+            <div style="display: flex; justify-content: center;">
+                <div><span style="content:'\292B';"><h3 style="color: rgba(234, 241, 241, 0.904);">&#10539;</h3></span>
+                </div>
+                <div style="padding-left: 2vh;"><h4 class="res">FAILED</h4></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <table class="table" style="padding: 8vh;">
+            <tbody style="padding: 4vh; background-color:rgba(195, 231, 231, 0.904);">
+            <tr>
+                <td>
+                    <h6>ORDER ID</h6>
+                </td>
+                <td>{{response.ORDERID}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <h6>TXN AMOUNT</h6>
+                </td>
+                <td>{{response.TXNAMOUNT}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <h6>TXN DATE</h6>
+                </td>
+                <td>{{response.TXNDATE}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="container"><button class="btn btn-primary"><a href="/shop" style="text-decoration: none; color:rgba(234, 241, 241, 0.904)">Back To Home</a></button></div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    {% if response.RESPCODE == '01' %}
+      console.log('clicked');
+      for(item in cart){
+        delete cart[item];
+      }
+      localStorage.clear();
+      update_pop();
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+    {% endif %}
+{% endblock %}

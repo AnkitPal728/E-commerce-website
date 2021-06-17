@@ -23,3 +23,38 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.cus_name
+
+class Order(models.Model):
+    o_id = models.AutoField(primary_key=True)
+    o_json = models.CharField(max_length=5000, default="")
+    o_amount = models.IntegerField(default=0)
+    o_name = models.CharField(max_length=100, default="")
+    o_email = models.CharField(max_length=100, default="")
+    o_mobile = models.CharField(max_length=10, default="")
+    o_add1 = models.CharField(max_length=1000, default="")
+    o_add2 = models.CharField(max_length=1000, default="")
+    o_city = models.CharField(max_length=100, default="")
+    o_state = models.CharField(max_length=100, default="")
+    o_zip = models.CharField(max_length=6, default="")
+
+    def __str__(self):
+        return self.o_name
+
+class Userl(models.Model):
+    u_id = models.AutoField(primary_key=True)
+    u_name = models.CharField(max_length=100, default="")
+    u_email = models.CharField(max_length=100, default="")
+    u_psswrd = models.CharField(max_length=100, default="")
+    u_rpsswrd = models.CharField(max_length=100, default="")
+
+    def __str__(self):
+        return self.u_name
+
+class OrderUpdate(models.Model):
+    update_id  = models.AutoField(primary_key=True)
+    order_id = models.IntegerField(default="")
+    update_desc = models.CharField(max_length=5000)
+    timestamp = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.update_desc[0:7] + "..."

@@ -1,6 +1,7 @@
 {% extends 'shop/basic.html' %}
 {% block title %} Contact Us {% endblock %}
 {% block body %}
+ <div id="message"></div>
  <div class="container my-4">
     <h4>Contact Us by filling this form</h4>
    <form action="/shop/contact" method="post">{% csrf_token %}
@@ -18,12 +19,23 @@
    </div>
    <div class="mb-3">
     <label for="desc" class="form-label">Enter your suggestions and problems here...</label>
-    <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+    <textarea class="form-control" id="desc" name="desc" rows="3" placeholder="Enter Your Suggestions"></textarea>
    </div>
 
-     <input class="btn btn-primary" type="submit" value="Submit">
+     <input class="btn btn-primary" onclick="show('success','Thank You, We got your suggesstion.'" type="submit" value="Submit">
      <input class="btn btn-primary" type="reset" value="Reset">
    </form>
  </div>
 {% endblock %}
-{% block script %} {% endblock %}
+{% block script %}
+  function show(type, message){
+        let msz = document.getElementById('alert');
+        msz.innerHTML = `<div class="alert alert-${type} d-flex align-items-center" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg><div>${message}</div></div>`;
+        setTimeout(function(){
+          msz.innerHTML = "";
+          },3000);
+      }
+{% endblock %}

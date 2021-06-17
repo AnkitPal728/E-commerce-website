@@ -4,34 +4,113 @@
 {% block style %}{% endblock %}
 
 {% block body %}
-<div class="container my-4" id="items"></div>
+<div id="alert"></div>
+
+<div class="container my-4" >
+    <h4 class="my-2">Review Your cart items</h4>
+    <ul class="list-group my-2" id="items"> </ul>
+    <button class="btn btn-primary my-2" onclick="clear_cart()">Clear Cart</button>
+</div>
+
+<div class="container my-4" id="details">
+    <h4 class="my-2">Fill your address details correctly</h4>
+    <form class="row g-3" method="post" action="/shop/checkout">{% csrf_token %}
+        <input type="hidden" name="json_item" id="json_item">
+        <input type="hidden" name="amount" id="json_amount">
+        <div class="col-md-6">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Your Name">
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your email">
+        </div>
+        <div class="col-12">
+            <label for="mobile" class="form-label">Mobile</label>
+            <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Enter Your Mobile No.">
+        </div>
+        <div class="col-12">
+            <label for="address1" class="form-label">Address</label>
+            <input type="text" class="form-control" id="address1" name="address1" placeholder="Enter your Address">
+        </div>
+        <div class="col-12">
+            <label for="address2" class="form-label">Address 2</label>
+            <input type="text" class="form-control" id="address2" name="address2" placeholder="Enter Your Address2">
+        </div>
+        <div class="col-md-6">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="Enter Your city">
+        </div>
+        <div class="col-md-4">
+            <label for="state" class="form-label">State</label>
+            <input type="text" id="state" class="form-control" name="state" placeholder="Enter Your state">
+        </div>
+        <div class="col-md-2">
+            <label for="zip_c" class="form-label">Zip</label>
+            <input type="text" class="form-control" id="zip_c" name="zip_c" placeholder="Enter Your Zip Code">
+        </div>
+        <div class="col-12 my-2">
+            <button type="submit" class="btn btn-primary" id="sub" >Sign in</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
 
 {% block script %}
-let items=document.getElementById('items');
-      let html="";
-      for(var item in cart){
-  console.log('check');
-          html+=`
-<!--<div id="accordion">
-    <div class="card">
-        <div class="card-header" id="heading${i}">
-            <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true"
-                        aria-controls="collapse${i}">
-                    ${item.title , quantity}
-                </button>
-            </h5>
-        </div>
+    if (localStorage.getItem('cart') == null) var cart = {};
+    else {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+    }
 
-        <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
-            <div class="card-body">
-                ${image,description,price}
-            </div>
-        </div>
-    </div>
-</div>--> nlfnvrknv;am;l`
+    function clear_cart(){
+      console.log('clicked');
+      for(item in cart){
+        delete cart[item];
       }
-if(html=="")items.innerHTML=`<h4 style="color:green">Your cart is empty. First, Go through our homepage to check latest branded items and add in to your cart.</h4>`;
-else items.innerHTML=html;
+      localStorage.clear();
+      update_pop();
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+      location.reload();
+    }
+
+      var html="";
+    var temp=`<p>Your Mac cart is empty. &nbspAdd some items here by checkout our trending products.</p>`;
+    let amount=0;
+   for(item in cart){
+      name=cart[item][1];
+      Qty=cart[item][0];
+      price=cart[item][2];
+      amount+=Qty*price;
+      html=`<li class="list-group-item d-flex justify-content-between align-items-center">
+            ${name}
+            <span class="badge bg-primary rounded-pill">${Qty}</span>
+        </li>`;
+      $('#items').append(html);
+   }
+   if(html=="")$('#items').append(temp);
+else {
+       $('#items').append(`<li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: grey;">
+            Your total payable amount
+            <b><span class="badge bg-primary rounded-pill" id="j_amount">${amount}</span></b></li>`);
+      }
+
+ $('#json_item').val(JSON.stringify(cart));
+ $('#json_amount').val($('#j_amount').html());
+{% if thank %}
+      show('success','your orders shipped and your order ID is {{id}}')
+      localStorage.clear();
+{% endif %}
+function show(type, message){
+        let msz = document.getElementById('alert');
+        msz.innerHTML = `<div class="alert alert-${type} d-flex align-items-center" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg><div>${message}</div></div>`;
+         setTimeout(function(){
+          msz.innerHTML = "";
+          document.location = "/shop";
+          },3000);
+      }
 {% endblock %}

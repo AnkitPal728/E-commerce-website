@@ -1,3 +1,35 @@
 {% extends 'shop/basic.html' %}
 {% block title %} About Us {% endblock %}
-{% block body %} This is about us Body {% endblock %}
+<!--<link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">-->
+{% load static %}
+{% block body %}
+  <div class="body" style="background-color: rgb(243 232 236); border: 4vh solid rgb(247 186 168);">
+        <div style="padding: 2vh;">
+        <div class="head" style="display: flex; justify-content: space-between; padding-bottom: 2vh;">
+            <div class="left" style="margin-left: 5vh;"><h3><a href="/shop" style="color: black; text-decoration: none;"> Awesome Cart</a></h3></div>
+            <div class="right" style="margin-right: 5vh;"><h3>About</h3></div>
+        </div>
+        <div class="middle" style="display: flex; justify-content: space-between; align-items: stretch; margin-left: 2vh; margin-right: 2vh;">
+            <div class="left" style="display: flex; border: 0.5vh solid rgb(68 38 38); border-radius: 2vh; align-content: center; background-color: rgb(68 38 38);"><img src="{% static 'shop/aankit.jpg' %}" alt="" style="border-radius: 2vh; max-width: 70vh;"></div>
+            <div class="right" style="display: flex; padding: 2vh; padding-left: 8vh; padding-right: 8vh; flex-direction: column; align-items: center;">
+                <div><h2>My Awesome Cart Story</h2></div>
+                <div style="display: flex;"><p>Started :    <strong style="padding-left: 3vh;">May 2021</strong></p></div>
+                <div><p>I, Ankit the only one who start this startup and I start this startup to provides an ease and trends in buying. And I hope, I will do it. And in future we have a team to provides more facilites to you. </p></div>
+                <div>
+                    <p>This site creation moto is only provides the helps people to buy or explore trending things. we provides full facility to our customers. And we assure you that this website is very easy and friendly in use.</p>
+                    <p>We strive to have a positive impact on customers, employees, small businesses, the economy, and communities. Amazonians are smart, passionate builders with different backgrounds and goals, who share a common desire to always be learning and inventing on behalf of our customers.</p>
+                    <p>If you're an inventor, you love to build and be part of high performance teams who are passionate about operational excellence—you’ll love it here. From day one at Amazon, you'll take ownership of projects that have a direct impact on our customers. You'll love being an Macian!</p>
+                </div>
+                <div><h3>Thank You. </h3></div>
+            </div>
+        </div>
+       </div>
+        <hr>
+        <div style="display: flex; justify-content: space-around;">
+            <div><h6>Mobile No. : 7248736061</h6></div>
+            <div><h6>Email : ankitpundir728@gmail.com</h6></div>
+            <div><h6>Linkend : www.linkedin.com/in/ankit-pal728</h6></div>
+            <div><h6>GitHub : www.github.com/AnkitPal728</h6></div>
+        </div>
+    </div>
+{% endblock %}
