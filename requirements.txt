@@ -17,9 +17,7 @@ mccabe==0.6.1
 paytmchecksum==1.7.0
 Pillow==8.2.0
 psycopg2==2.9.1
-PyAudio @ file:///E:/PyAudio-0.2.11-cp38-cp38-win32.whl
 pycryptodome==3.10.1
-pygame==1.9.6
 pylint==2.4.4
 pypiwin32==223
 pyttsx3==2.90
